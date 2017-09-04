@@ -1,16 +1,55 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+
+  constructor(props){
+    super(props);
+    this.handleSubmit.bind(this);//bind the right this to the function
+  }
+
+
+  /**
+   * This method return the list view of the page
+   * from the array of the props passed to <app people={initialState.people} />
+   */
+  listPeople() {
+    return (
+      //map function iterates for each item in the list
+      this.props.people.map(person => {
+        return (
+          <tr key={person.id}>
+            <th scope="row">{person.id}</th>
+            <td>{person.firstName}</td>
+            <td>{person.lastName}</td>
+            <td>{person.bio}</td>
+            <td><button type="button" className="btn btn-info btn-sm">Edit</button></td>
+            <td><button type="button" className="btn btn-danger btn-sm">Delete</button></td>
+          </tr>
+        )
+      })
+    )
+  }
+
+  /**
+   * This method handles the save button
+   * @param {Form event} e 
+   */
+  handleSubmit(e){
+    e.preventDefault();
+    console.log('Submit event captured.')
+  }
+
+
+
   render() {
     return (
       <div className="container" style={{ backgroundColor: '#381254', color: '#fff', paddingTop: '20px', margin: '20px auto' }}>
 
         <div className="row">
           <div className="col-3 text-center">
-            <figure class="figure">
-              <img src={require('./redux.png')} style={{ width: '100px' }} class="figure-img" alt="Redux." />
+            <figure className="figure">
+              <img src={require('./redux.png')} style={{ width: '100px' }} className="figure-img" alt="Redux." />
             </figure>
           </div>
           <div className="col-6 text-center">
@@ -18,29 +57,29 @@ class App extends Component {
             <h2>React | Redux | Firebase</h2>
           </div>
           <div className="col-3 text-center">
-            <figure class="figure">
-              <img src={require('./firebase.png')} style={{ width: '100px' }} class="figure-img" alt="Firebase." />
+            <figure className="figure">
+              <img src={require('./firebase.png')} style={{ width: '100px' }} className="figure-img" alt="Firebase." />
             </figure>
           </div>
         </div>
         <div className="row" style={{ padding: '40px', backgroundColor: '#9373AA' }}>
           <div className="container col-md-12">
-            <form>
+            <form onSubmit={this.handleSubmit}>
               <div className="row">
                 <div className="col-md-6 mb-3">
-                  <label for="validationDefault01">First name</label>
-                  <input type="text" className="form-control" id="validationDefault01" placeholder="First name" required />
+                  <label htmlFor="validationDefault01">First name</label>
+                  <input type="text" className="form-control" id="validationDefault01" placeholder="First name"  />
                 </div>
                 <div className="col-md-6 mb-3">
-                  <label for="validationDefault02">Last name</label>
-                  <input type="text" className="form-control" id="validationDefault02" placeholder="Last name" required />
+                  <label htmlFor="validationDefault02">Last name</label>
+                  <input type="text" className="form-control" id="validationDefault02" placeholder="Last name"  />
                 </div>
               </div>
               <div className="row">
 
                 <div className="col-md-12 mb-3">
-                  <label for="validationDefault04">Bio</label>
-                  <textarea className="form-control" rows="2" id="validationDefault04" placeholder="Bio" required />
+                  <label htmlFor="validationDefault04">Bio</label>
+                  <textarea className="form-control" rows="2" id="validationDefault04" placeholder="Bio"  />
                   <div className="invalid-feedback">
                     Please provide a bio.
                   </div>
@@ -66,30 +105,10 @@ class App extends Component {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Louis</td>
-                  <td>Vuitton</td>
-                  <td>A French fashion designer and businessman.</td>
-                  <td><button type="button" className="btn btn-info btn-sm">Edit</button></td>
-                  <td><button type="button" className="btn btn-danger btn-sm">Delete</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Neymar</td>
-                  <td>Júnior</td>
-                  <td>A football player.</td>
-                  <td><button type="button" className="btn btn-info btn-sm">Edit</button></td>
-                  <td><button type="button" className="btn btn-danger btn-sm">Delete</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Félix</td>
-                  <td>Khoury</td>
-                  <td>Funny character: Famous phrase: "Eu não tenho vocação para a pobreza”</td>
-                  <td><button type="button" className="btn btn-info btn-sm">Edit  </button></td>
-                  <td><button type="button" className="btn btn-danger btn-sm">Delete</button></td>
-                </tr>
+                {/* This call generate the table lines for all People */}
+                {
+                  this.listPeople()
+                }
               </tbody>
             </table>
 

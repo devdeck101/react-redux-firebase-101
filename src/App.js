@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
 
+import { connect } from 'react-redux';
+import { addPerson } from './actions/peopleActions';
+
 class App extends Component {
 
   constructor(props){
     super(props);
-    this.handleSubmit.bind(this);//bind the right this to the function
+    this.handleSubmit = this.handleSubmit.bind(this);//bind the right this to the function
+    this.handleDelete = this.handleDelete.bind(this);//bind the right this to the function
+    this.handleEdit = this.handleEdit.bind(this);//bind the right this to the function
   }
 
 
@@ -23,8 +28,8 @@ class App extends Component {
             <td>{person.firstName}</td>
             <td>{person.lastName}</td>
             <td>{person.bio}</td>
-            <td><button type="button" className="btn btn-info btn-sm">Edit</button></td>
-            <td><button type="button" className="btn btn-danger btn-sm">Delete</button></td>
+            <td><button type="button" className="btn btn-info btn-sm" onClick={() => this.handleEdit(person.id)}>Edit</button></td>
+            <td><button type="button" className="btn btn-danger btn-sm" onClick={() => this.handleDelete(person.id)}>Delete</button></td>
           </tr>
         )
       })
@@ -33,11 +38,40 @@ class App extends Component {
 
   /**
    * This method handles the save button
+   * ADD_PERSON
    * @param {Form event} e 
    */
   handleSubmit(e){
     e.preventDefault();
+    let person = {
+      firstName: this.refs.firstName.value,
+      lastName: this.refs.lastName.value,
+      bio: this.refs.bio.value
+    }
+    console.log(person);
+    this.props.addPerson(person);
+    e.target.reset();
     console.log('Submit event captured.')
+  }
+
+  /**
+   * This method handles the delete button
+   * REMOVE_PERSON
+   * @param {Person.id} id 
+   */
+  handleDelete(id) {
+    console.log(id)
+    console.log('Delete captured ', id);
+  }
+
+  /**
+   * This method handles the edit button
+   * EDIT_PERSON
+   * SELECT_PERSON
+   * @param {Person.id} id 
+   */
+  handleEdit(id) {
+    console.log('Edit captured ', id);
   }
 
 
@@ -68,18 +102,18 @@ class App extends Component {
               <div className="row">
                 <div className="col-md-6 mb-3">
                   <label htmlFor="validationDefault01">First name</label>
-                  <input type="text" className="form-control" id="validationDefault01" placeholder="First name"  />
+                  <input type="text" ref="firstName" className="form-control" id="validationDefault01" placeholder="First name"  />
                 </div>
                 <div className="col-md-6 mb-3">
                   <label htmlFor="validationDefault02">Last name</label>
-                  <input type="text" className="form-control" id="validationDefault02" placeholder="Last name"  />
+                  <input type="text" ref="lastName" className="form-control" id="validationDefault02" placeholder="Last name"  />
                 </div>
               </div>
               <div className="row">
 
                 <div className="col-md-12 mb-3">
                   <label htmlFor="validationDefault04">Bio</label>
-                  <textarea className="form-control" rows="2" id="validationDefault04" placeholder="Bio"  />
+                  <textarea ref="bio" className="form-control" rows="2" id="validationDefault04" placeholder="Bio"  />
                   <div className="invalid-feedback">
                     Please provide a bio.
                   </div>
@@ -120,4 +154,18 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state, pwnProps) => {
+  return {
+    people: state.people
+    //array of people will be available as props (this.props.people)
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addPerson: person => dispatch(addPerson(person))
+    //addPerson will be available as props (this.props.addPerson)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

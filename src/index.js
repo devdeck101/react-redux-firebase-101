@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import { Provider } from 'react-redux';
+
+import configureStore from './store';
 
 
 /**
@@ -31,14 +34,20 @@ const initialState = {
     ]
 }
 
+const store = configureStore(initialState);
+
 /**
- * 1. Create store
- * 2. Create the action creator
- * 3. Create the reducers
- * 4. Provide the store to the application
- * 5. Remove people={initialState.people} from the <App />
+ * 1. Create actions
+ * 2. Create Action Creator
+ * 3. Create Reducer
+ * 4. Create store
+ * 5. Provide the store
  */
 
 
-ReactDOM.render(<App people={initialState.people} />, document.getElementById('root'));
+ReactDOM.render(
+    <Provider store={store}>
+        <App />
+    </Provider>
+    , document.getElementById('root'));
 registerServiceWorker();
